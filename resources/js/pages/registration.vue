@@ -1,4 +1,18 @@
-<script setup></script>
+<script setup>
+import { reactive } from "vue";
+import { useAuth } from "../composables/auth";
+
+const userRegistration = reactive({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+});
+const { registerUser } = useAuth();
+const register = async () => {
+    await registerUser(userRegistration);
+};
+</script>
 
 <template>
     <div class="container-fluid">
@@ -15,6 +29,7 @@
                                     type="text"
                                     class="form-control"
                                     placeholder="Name"
+                                    v-model="userRegistration.name"
                                     required
                                 />
                             </div>
@@ -24,6 +39,7 @@
                                     type="email"
                                     class="form-control"
                                     placeholder="Email"
+                                    v-model="userRegistration.email"
                                     required
                                 />
                             </div>
@@ -33,6 +49,7 @@
                                     type="password"
                                     class="form-control"
                                     placeholder="Password"
+                                    v-model="userRegistration.password"
                                     required
                                 />
                             </div>
@@ -42,6 +59,7 @@
                                     type="password"
                                     class="form-control"
                                     placeholder="Confirm Password"
+                                    v-model="userRegistration.confirmPassword"
                                     required
                                 />
                             </div>

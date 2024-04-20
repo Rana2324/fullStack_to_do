@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\TodoList;
 use App\Models\TodoType;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use PhpParser\Node\Stmt\TryCatch;
 
@@ -92,6 +94,53 @@ class TodoListController extends Controller
             return sendSuccessResponse("Todo types retrieved successfully", $todoTypes);
         } catch (\Exception $ex) {
             return sendErrorResponse("Failed to retrieve todo types :" . $ex);
+        }
+    }
+
+
+    public function login(Request $request)
+    {
+        // dd($request);
+        try {
+            $userLogin = $request->only("email", "password");
+
+
+            if (Auth::attempt($userLogin)) {
+
+                return sendSuccessResponse("Login successfully", auth()->user());
+            } else {
+                return sendErrorResponse("Failed to Login :", "Wrong Credentials");
+            }
+        } catch (\Exception $ex) {
+            return sendErrorResponse("Failed to Login :" . $ex);
+        }
+    }
+    public function registration(Request $request)
+    {
+        try {
+            $userRegistration = User::create([
+                "name" => $request->name,
+                "email" => $request->email,
+                "password" => $request->password
+            ]);
+            return sendSuccessResponse("Registration  successfully", $userRegistration);
+        } catch (\Exception $ex) {
+
+            return sendErrorResponse("Failed to Registration :" . $ex);
+        }
+    }
+    public function me()
+    {
+        try {
+
+            if (auth()->check()) {
+                return sendSuccessResponse("User login", auth()->user());
+            } else {
+                return sendErrorResponse("User not login");
+            }
+        } catch (\Exception $ex) {
+
+            return sendErrorResponse("Failed to Registration :" . $ex);
         }
     }
 }

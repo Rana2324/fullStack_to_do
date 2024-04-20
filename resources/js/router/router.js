@@ -4,23 +4,55 @@ import addTodo from "../pages/addTodo.vue";
 import {createRouter,createWebHistory} from "vue-router";
 import login from "../pages/login.vue";
 import registration from "../pages/registration.vue";
+import { useAuthStore } from "../stores/AuthStore";
+
+
+
+
 
 const routes = [
     {
         path:"/",
         name:"index",
-        component:index
+        component:index,
+        beforeEnter: (to, from, next) => {
+            const {isAuthenticated} = useAuthStore();
+            if(isAuthenticated){
+                next();
+            }
+            else{
+                next({name:"login"})
+            }
+        }
     },
     {
         path:"/addTodo",
         name:"addTodo",
-        component:addTodo
+        component:addTodo,
+        beforeEnter: (to, from, next) => {
+            const {isAuthenticated} = useAuthStore();
+            if(isAuthenticated){
+                next();
+            }
+            else{
+                next({name:"login"})
+            }
+        }
     },
 
     {
         path:"/edit/:id",
         name:"edit",
-        component:editTodo
+        component:editTodo,
+        beforeEnter: (to, from, next) => {
+            const {isAuthenticated} = useAuthStore();
+            if(isAuthenticated){
+                next();
+            }
+            else{
+                next({name:"login"})
+            }
+        }
     },
     {
         path:"/login",

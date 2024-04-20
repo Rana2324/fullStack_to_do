@@ -11,3 +11,6 @@ Route::get("/todo-list/{id}", [TodoListController::class, 'getTodoListById']);
 Route::put("/todo-list/{id}", [TodoListController::class, 'update']);
 Route::post("/todo-list", [TodoListController::class, 'createTodo']);
 Route::get("/todo-types", [TodoListController::class, 'todoTypes']);
+Route::post("/login", [TodoListController::class, "login"]);
+Route::post("/registration", [TodoListController::class, "registration"]);
+Route::get("/me", [TodoListController::class, "me"]);

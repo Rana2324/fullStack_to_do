@@ -13,6 +13,7 @@
                                     type="email"
                                     class="form-control"
                                     placeholder="Email"
+                                    v-model="userLogin.email"
                                     required
                                 />
                             </div>
@@ -22,6 +23,7 @@
                                     type="password"
                                     class="form-control"
                                     placeholder="Password"
+                                    v-model="userLogin.password"
                                     required
                                 />
                             </div>
@@ -55,7 +57,9 @@
                         </div>
                         <!-- Registration Link -->
                         <div class="text-center mt-3">
-                            <router-link to="/register" class="link-primary"
+                            <router-link
+                                :to="{ name: 'registration' }"
+                                class="link-primary"
                                 >Don't have an account? Register</router-link
                             >
                         </div>
@@ -66,7 +70,19 @@
     </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { reactive } from "vue";
+import { useAuth } from "../composables/auth";
+
+const userLogin = reactive({
+    email: "",
+    password: "",
+});
+const { loginUser } = useAuth();
+const login = async () => {
+    await loginUser(userLogin);
+};
+</script>
 
 <style scoped>
 .card {
