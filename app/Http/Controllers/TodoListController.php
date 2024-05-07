@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\UserVerificationMail;
 use App\Models\TodoList;
 use App\Models\TodoType;
 use App\Models\User;
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use PhpParser\Node\Stmt\TryCatch;
 
 class TodoListController extends Controller
@@ -105,7 +108,7 @@ class TodoListController extends Controller
             $userLogin = $request->only("email", "password");
 
 
-            if (Auth::attempt($userLogin)) {
+            if (Auth::attempt($userLogin) && auth()->user()->is_verified) {
 
                 return sendSuccessResponse("Login successfully", auth()->user());
             } else {
@@ -123,6 +126,7 @@ class TodoListController extends Controller
                 "email" => $request->email,
                 "password" => $request->password
             ]);
+            $this->sendVerificationEmail($userRegistration);
             return sendSuccessResponse("Registration  successfully", $userRegistration);
         } catch (\Exception $ex) {
 
@@ -142,5 +146,9 @@ class TodoListController extends Controller
 
             return sendErrorResponse("Failed to Registration :" . $ex);
         }
+    }
+
+    private function sendVerificationEmail($user){
+        Mail::to($user->email)->send(new UserVerificationMail($user->email));
     }
 }

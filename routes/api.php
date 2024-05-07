@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TodoListController;
 use App\Models\TodoType;
 use Illuminate\Http\Request;
@@ -14,3 +15,4 @@ Route::get("/todo-types", [TodoListController::class, 'todoTypes']);
 Route::post("/login", [TodoListController::class, "login"]);
 Route::post("/registration", [TodoListController::class, "registration"]);
 Route::get("/me", [TodoListController::class, "me"]);
+Route::get("/verify", [AuthController::class, "verify"]);
