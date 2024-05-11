@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\EmailVerificationJob;
 use App\Mail\UserVerificationMail;
 use App\Models\TodoList;
 use App\Models\TodoType;
@@ -148,7 +149,8 @@ class TodoListController extends Controller
         }
     }
 
-    private function sendVerificationEmail($user){
-        Mail::to($user->email)->send(new UserVerificationMail($user->email));
+    private function sendVerificationEmail($user)
+    {
+        EmailVerificationJob::dispatch($user->email);
     }
 }
